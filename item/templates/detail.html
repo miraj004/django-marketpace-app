@@ -1,0 +1,85 @@
+{% extends 'core/base.html' %}
+{% block title %} {{ item.name }} {% endblock title %}
+{% block content %}
+    <main class="font-poppins bg-gray-800 border border-gray-700 relative">
+        <div class="p-20 w-auto flex px-24 justify-center relative">
+            <div class="">
+                <div class="mr-10">
+                    <img class="rounded-lg" src="{{ item.image.url }}" alt="Item image"/>
+                </div>
+                <div class="w-full sm:w-[70%] md:w-[60%] lg:w-[50%]">
+                    <h1 class="text-white font-bold text-3xl mt-6 mb-8">
+                        {{ item.name }} <span class="text-pink-400">{{ item.category.name }}</span>
+                    </h1>
+                    <p class="text-white w-full sm:w-[35rem] md:w-[30rem] lg:w-[25rem] mb-10">
+                        {{ item.description }}
+                    </p>
+                    <p class="text-white w-full sm:w-[35rem] md:w-[30rem] lg:w-[25rem] mb-10">
+                        Posted by <strong>{{ item.created_by.first_name }}</strong> with
+                        <strong>${{ item.price }}</strong>
+                    </p>
+                    {% if request.user == item.created_by %}
+                        <div class="flex space-x-2">
+                            <a href="{% url 'item:edit' item.id %}"
+                               class="focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">Edit</a>
+                            <form action="{% url 'item:delete' item.id %}" method="POST">
+                                {% csrf_token %}
+                                <button type="submit"
+                                        class="focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900">
+                                    Delete
+                                </button>
+                            </form>
+                        </div>
+                    {% else %}
+                        <a href="{% url 'conversation:new' item.id %}"
+                           class="relative inline-flex items-center justify-center p-0.5 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-cyan-500 to-blue-500 group-hover:from-cyan-500 group-hover:to-blue-500 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-cyan-200 dark:focus:ring-cyan-800">
+                    <span class="relative px-5 py-2.5 transition-all ease-in duration-75 bg-white dark:bg-gray-900 rounded-md group-hover:bg-opacity-0">
+                        Contact Seller
+                    </span>
+                        </a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </main>
+    <section class="bg-white dark:bg-gray-900">
+        <div class="my-10">
+            <h2 class="text-center mb-4 text-4xl tracking-tight font-extrabold text-gray-900 dark:text-white">
+                Related Items
+            </h2>
+        </div>
+
+        <div class="mx-auto text-center mb-8 lg:mb-12">
+            <div class="space-y-8 lg:grid lg:grid-cols-12 sm:gap-2 xl:gap-5 lg:space-y-0">
+                {% for related_item in related_items %}
+                    <div class="w-full col-span-4 max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
+                        <a href="{% url 'item:detail' related_item.id %}">
+                            <img class="p-8 rounded-t-lg" src="{{ related_item.image.url }}" alt="product image"/>
+                        </a>
+                        <div class="px-5 pb-5">
+                            <a href="#">
+                                <h5 class="text-xl font-semibold tracking-tight text-gray-900 dark:text-white">{{ related_item.name }}</h5>
+                            </a>
+                            <div class="flex items-center justify-between mt-5">
+                                <span class="text-3xl font-bold text-gray-900 dark:text-white">{{ related_item.price }}</span>
+                                <a href="#"
+                                   class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                                    Add to cart</a>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+
+    </section>
+{% endblock content %}
+
+{% block header %}
+    Item Detail
+{% endblock header %}
+
+
+{% block subtitle %}
+    Here is the more detail of item
+{% endblock subtitle %}

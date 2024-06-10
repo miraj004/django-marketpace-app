@@ -1,0 +1,35 @@
+{% extends 'core/base.html' %}
+{% block title %} {{ title }} {% endblock title %}
+
+{% block content %}
+    <main class="font-poppins bg-gray-800 border border-gray-700 relative">
+            <form action="." method="POST" enctype="multipart/form-data"
+                  class="p-10">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button type="submit"
+                        class="mt-5 relative inline-flex items-center justify-center p-0.5 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-purple-500 to-pink-500 group-hover:from-purple-500 group-hover:to-pink-500 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-purple-200 dark:focus:ring-purple-800"><span
+                        class="relative px-5 py-2.5 transition-all ease-in duration-75 bg-white dark:bg-gray-900 rounded-md group-hover:bg-opacity-0"
+                >Submit</span>
+                </button>
+                {% if form.errors or form.non_field_errors %}
+                    <div class="p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-900 dark:text-red-400"
+                         role="alert">
+                        {% for field in form %}
+                            <p class="text-red-600">{{ field.errors }}</p>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </form>
+
+    </main>
+{% endblock content %}
+
+{% block header %}
+    Item Detail
+{% endblock header %}
+
+
+{% block subtitle %}
+    Here is the more detail of item
+{% endblock subtitle %}
